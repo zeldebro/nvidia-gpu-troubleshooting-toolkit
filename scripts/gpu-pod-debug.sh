@@ -105,7 +105,9 @@ else
             EVENTS=$($KUBECTL get events -n "$ns" --field-selector "involvedObject.name=${pod}" --sort-by=.lastTimestamp 2>/dev/null | tail -3 || true)
             if [ -n "$EVENTS" ]; then
                 echo "    Last events:"
-                echo "$EVENTS" | sed 's/^/      /'
+                while IFS= read -r eline; do
+                    echo "      ${eline}"
+                done <<< "$EVENTS"
             fi
         fi
     done
@@ -129,7 +131,9 @@ else
             LOGS=$($KUBECTL logs "$pod" -n "$ns" --tail=5 2>/dev/null || true)
             if [ -n "$LOGS" ]; then
                 echo "    Last logs:"
-                echo "$LOGS" | sed 's/^/      /'
+                while IFS= read -r lline; do
+                    echo "      ${lline}"
+                done <<< "$LOGS"
             fi
         fi
     done

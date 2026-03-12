@@ -40,6 +40,7 @@ pass "nvidia-smi is available"
 DRIVER_VERSION=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader | head -1)
 CUDA_VERSION=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>/dev/null | head -1 || echo "N/A")
 info "Driver Version: ${DRIVER_VERSION}"
+info "CUDA Compute Capability: ${CUDA_VERSION}"
 
 # ── GPU Count & Models ────────────────────────────────────────────────────────
 header "2. GPU Inventory"
@@ -56,10 +57,9 @@ header "3. GPU Utilization"
 
 nvidia-smi --query-gpu=index,utilization.gpu,utilization.memory --format=csv,noheader | while IFS=',' read -r idx gpu_util mem_util; do
     gpu_pct=$(echo "$gpu_util" | tr -dc '0-9')
-    mem_pct=$(echo "$mem_util" | tr -dc '0-9')
 
     if [ "$gpu_pct" -gt 95 ]; then
-        warn "GPU ${idx}: Compute ${gpu_util} (very high)"
+        warn "GPU ${idx}: Compute ${gpu_util} | Memory ${mem_util} (very high)"
         WARNINGS=$((WARNINGS+1))
     else
         pass "GPU ${idx}: Compute ${gpu_util} | Memory ${mem_util}"
@@ -69,7 +69,7 @@ done
 # ── GPU Memory ────────────────────────────────────────────────────────────────
 header "4. GPU Memory"
 
-nvidia-smi --query-gpu=index,memory.used,memory.total,memory.free --format=csv,noheader | while IFS=',' read -r idx used total free; do
+nvidia-smi --query-gpu=index,memory.used,memory.total,memory.free --format=csv,noheader | while IFS=',' read -r idx used total _free; do
     used_mb=$(echo "$used" | tr -dc '0-9')
     total_mb=$(echo "$total" | tr -dc '0-9')
 
