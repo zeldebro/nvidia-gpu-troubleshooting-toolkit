@@ -13,9 +13,9 @@
   <a href="#-quick-start"><img src="https://img.shields.io/badge/Quick%20Start-🚀-green?style=flat-square" alt="Quick Start"/></a>
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square" alt="PRs Welcome"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square" alt="License"/></a>
-  <img src="https://img.shields.io/github/stars/your-username/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Stars"/>
-  <img src="https://img.shields.io/github/forks/your-username/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Forks"/>
-  <img src="https://img.shields.io/github/issues/your-username/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Issues"/>
+  <img src="https://img.shields.io/github/stars/zeldebro/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Stars"/>
+  <img src="https://img.shields.io/github/forks/zeldebro/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Forks"/>
+  <img src="https://img.shields.io/github/issues/zeldebro/nvidia-gpu-troubleshooting-toolkit?style=flat-square" alt="Issues"/>
 </p>
 
 ---
@@ -90,7 +90,7 @@ nvidia-gpu-troubleshooting-toolkit/
 ### Option 1: Clone and Explore Guides
 
 ```bash
-git clone https://github.com/your-username/nvidia-gpu-troubleshooting-toolkit.git
+git clone https://github.com/zeldebro/nvidia-gpu-troubleshooting-toolkit.git
 cd nvidia-gpu-troubleshooting-toolkit
 ```
 
@@ -328,7 +328,7 @@ Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE
 
 ```bash
 # Fork the repo
-git clone https://github.com/your-username/nvidia-gpu-troubleshooting-toolkit.git
+git clone https://github.com/zeldebro/nvidia-gpu-troubleshooting-toolkit.git
 cd nvidia-gpu-troubleshooting-toolkit
 
 # Create a branch
