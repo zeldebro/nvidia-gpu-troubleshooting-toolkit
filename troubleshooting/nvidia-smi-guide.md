@@ -13,7 +13,7 @@ It provides information about:
 
 ---
 
-# List Available GPUs
+## List Available GPUs
 
 nvidia-smi -L
 
@@ -23,7 +23,7 @@ GPU 0: Tesla T4 (UUID: GPU-xxxx)
 
 ---
 
-# GPU Utilization
+## GPU Utilization
 
 Shows how busy the GPU compute units are.
 
@@ -40,7 +40,7 @@ Meaning:
 
 ---
 
-# GPU Memory Usage
+## GPU Memory Usage
 
 Check how much GPU VRAM is being used.
 
@@ -57,7 +57,7 @@ Meaning:
 
 ---
 
-# GPU Temperature
+## GPU Temperature
 
 nvidia-smi –query-gpu=temperature.gpu –format=csv
 
@@ -72,7 +72,7 @@ Normal GPU temperature range:
 
 ---
 
-# GPU Power Usage
+## GPU Power Usage
 
 nvidia-smi –query-gpu=power.draw,power.limit –format=csv
 
@@ -87,7 +87,7 @@ GPU is currently using 60 watts out of 70 watts available
 
 ---
 
-# GPU Fan Speed
+## GPU Fan Speed
 
 nvidia-smi –query-gpu=fan.speed –format=csv
 
@@ -98,21 +98,21 @@ fan.speed [%]
 
 ---
 
-# GPU Clock Speeds
+## GPU Clock Speeds
 
 nvidia-smi –query-gpu=clocks.current.graphics,clocks.current.sm,clocks.current.memory –format=csv
 
 These represent:
 
 | Metric | Meaning |
-|------|------|
-Graphics Clock | GPU graphics core frequency |
-SM Clock | Streaming multiprocessor frequency |
-Memory Clock | GPU memory frequency |
+| ------ | ------ |
+| Graphics Clock | GPU graphics core frequency |
+| SM Clock | Streaming multiprocessor frequency |
+| Memory Clock | GPU memory frequency |
 
 ---
 
-# GPU Running Processes
+## GPU Running Processes
 
 Shows which processes are using the GPU.
 
@@ -129,7 +129,7 @@ Python process with PID 1234 is using 5GB GPU memory
 
 ---
 
-# Real-Time GPU Monitoring
+## Real-Time GPU Monitoring
 
 nvidia-smi dmon
 
@@ -142,15 +142,15 @@ gpu   sm   mem   enc   dec
 Explanation:
 
 | Column | Meaning |
-|------|------|
-SM | GPU compute utilization |
-MEM | Memory utilization |
-ENC | Video encoder usage |
-DEC | Video decoder usage |
+| ------ | ------ |
+| SM | GPU compute utilization |
+| MEM | Memory utilization |
+| ENC | Video encoder usage |
+| DEC | Video decoder usage |
 
 ---
 
-# GPU Topology (Multi GPU Systems)
+## GPU Topology (Multi GPU Systems)
 
 Check GPU interconnects.
 
@@ -167,11 +167,10 @@ GPUs are connected using NVLink
 
 ---
 
-# Watch GPU Usage in Real Time
+## Watch GPU Usage in Real Time
 
 watch -n 1 nvidia-smi
 
 Updates GPU usage every second.
 
 This is useful when debugging training workloads.
-
