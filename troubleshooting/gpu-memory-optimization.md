@@ -17,6 +17,7 @@ nvidia-smi --query-gpu=memory.used,memory.total,memory.free --format=csv
 ```python
 import torch
 
+
 def print_gpu_memory():
     allocated = torch.cuda.memory_allocated() / 1e9
     reserved = torch.cuda.memory_reserved() / 1e9
@@ -25,7 +26,7 @@ def print_gpu_memory():
 
 ### Common OOM Error
 
-```
+```text
 RuntimeError: CUDA out of memory.
 Tried to allocate 256.00 MiB (GPU 0; 15.78 GiB total capacity;
 13.02 GiB already allocated; 221.12 MiB free)
@@ -38,14 +39,14 @@ Tried to allocate 256.00 MiB (GPU 0; 15.78 GiB total capacity;
 The simplest fix. Memory usage scales linearly with batch size.
 
 ```python
-# Before — OOM
+# Before - OOM
 train_loader = DataLoader(dataset, batch_size=64)
 
-# After — fits in memory
+# After - fits in memory
 train_loader = DataLoader(dataset, batch_size=16)
 ```
 
-**Trade-off:** Smaller batch size = more training steps = longer training time.
+**Trade-off:** Smaller batch size means more training steps and longer training time.
 
 ---
 
@@ -72,10 +73,10 @@ for data, target in loader:
     scaler.update()
 ```
 
-### Memory Savings
+### Memory Savings (Precision)
 
 | Precision | Memory per Parameter |
-|-----------|---------------------|
+| ----------- | ---------------------- |
 | FP32 | 4 bytes |
 | FP16 / BF16 | 2 bytes |
 | INT8 | 1 byte |
@@ -86,24 +87,23 @@ for data, target in loader:
 
 Trades compute for memory by recomputing intermediate activations during backward pass instead of storing them.
 
-### PyTorch
+### PyTorch Example
 
 ```python
 from torch.utils.checkpoint import checkpoint
 
 class MyModel(nn.Module):
     def forward(self, x):
-        # Checkpoint expensive layers
         x = checkpoint(self.block1, x)
         x = checkpoint(self.block2, x)
         x = self.head(x)
         return x
 ```
 
-### Memory Savings
+### Memory Savings (Checkpointing)
 
 | Model Size | Without Checkpointing | With Checkpointing |
-|-----------|----------------------|-------------------|
+| ----------- | ---------------------- | ------------------- |
 | 1B params | 16 GB | 8 GB |
 | 7B params | 56 GB | 20 GB |
 
@@ -128,24 +128,24 @@ for i, (data, target) in enumerate(loader):
         optimizer.zero_grad()
 ```
 
-**Effect:** Effective batch size = `batch_size × accumulation_steps`
+**Effect:** Effective batch size = `batch_size * accumulation_steps`
 
 ---
 
 ## 6. Model Parallelism
 
-Split model across multiple GPUs when it doesn't fit on a single GPU.
+Split model across multiple GPUs when it does not fit on a single GPU.
 
 ### Pipeline Parallelism
 
 ```python
-# Split model across 2 GPUs
-model.layer1.to('cuda:0')
-model.layer2.to('cuda:1')
+model.layer1.to("cuda:0")
+model.layer2.to("cuda:1")
+
 
 def forward(x):
-    x = model.layer1(x.to('cuda:0'))
-    x = model.layer2(x.to('cuda:1'))
+    x = model.layer1(x.to("cuda:0"))
+    x = model.layer2(x.to("cuda:1"))
     return x
 ```
 
@@ -160,7 +160,7 @@ Split individual layers across GPUs. Libraries: Megatron-LM, DeepSpeed.
 Some optimizers use less GPU memory.
 
 | Optimizer | Memory per Parameter |
-|-----------|---------------------|
+| ----------- | --------------------- |
 | Adam | 8 bytes (2 states) |
 | AdamW | 8 bytes (2 states) |
 | SGD | 4 bytes (momentum) |
@@ -180,8 +180,8 @@ optimizer = bnb.optim.Adam8bit(model.parameters(), lr=1e-4)
 ## 8. Clear GPU Cache
 
 ```python
-import torch
 import gc
+import torch
 
 # Clear cache
 torch.cuda.empty_cache()
@@ -217,21 +217,21 @@ torch.cuda.empty_cache()
 
 ## 10. Memory Estimation Formula
 
-```
+```text
 Total GPU Memory = Model Parameters + Gradients + Optimizer States + Activations + Framework Overhead
 
-Model (FP32):     params × 4 bytes
-Gradients:        params × 4 bytes
-Adam States:      params × 8 bytes
+Model (FP32):     params x 4 bytes
+Gradients:        params x 4 bytes
+Adam States:      params x 8 bytes
 Activations:      depends on batch size and model architecture
 ```
 
 ### Example: 1B Parameter Model (FP32 + Adam)
 
-```
-Model:      1B × 4 bytes = 4 GB
-Gradients:  1B × 4 bytes = 4 GB
-Adam:       1B × 8 bytes = 8 GB
+```text
+Model:      1B x 4 bytes = 4 GB
+Gradients:  1B x 4 bytes = 4 GB
+Adam:       1B x 8 bytes = 8 GB
 Total:      ~16 GB + activations
 ```
 
@@ -240,7 +240,7 @@ Total:      ~16 GB + activations
 ## Quick Fix Checklist
 
 | Technique | Memory Savings | Speed Impact |
-|-----------|---------------|-------------|
+| -------- | --------------- | ------------- |
 | Reduce batch size | Proportional | More steps |
 | Mixed precision (FP16) | ~50% | Slightly faster |
 | Gradient checkpointing | ~40-60% | ~20-30% slower |
@@ -248,4 +248,3 @@ Total:      ~16 GB + activations
 | 8-bit optimizer | ~50% optimizer states | Minimal |
 | `torch.no_grad()` for eval | Saves activation memory | None |
 | Clear cache | Frees unused memory | None |
-

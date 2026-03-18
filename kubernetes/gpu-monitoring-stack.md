@@ -6,7 +6,7 @@ Set up a complete GPU monitoring pipeline in Kubernetes using DCGM Exporter, Pro
 
 ## Architecture
 
-```
+```text
 ┌──────────────┐    ┌────────────┐    ┌──────────┐
 │ DCGM Exporter│───▶│ Prometheus │───▶│ Grafana  │
 │ (per GPU node)│    │  (scraper) │    │(dashboard)│
@@ -104,7 +104,7 @@ scrape_configs:
 
 ### Verify in Prometheus
 
-```
+```text
 # Open Prometheus UI → Status → Targets
 # Look for dcgm-exporter target
 
@@ -215,4 +215,3 @@ spec:
 | DCGM pods CrashLoopBackOff | Check GPU driver compatibility, run `nvidia-smi` on node |
 | Metrics show 0 | Ensure GPU workloads are running |
 | Grafana shows "No data" | Verify Prometheus data source URL in Grafana |
-

@@ -25,4 +25,3 @@ Any alternative solutions you've considered.
 ## Additional Context
 
 Add any other context, examples, or references.
-

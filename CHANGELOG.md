@@ -34,4 +34,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `.github/ISSUE_TEMPLATE/bug_report.md` — Bug report template
   - `.github/ISSUE_TEMPLATE/feature_request.md` — Feature request template
   - `.github/PULL_REQUEST_TEMPLATE.md` — PR template
-

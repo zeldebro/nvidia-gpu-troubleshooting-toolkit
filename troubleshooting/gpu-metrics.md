@@ -2,7 +2,7 @@
 
 This guide explains how to identify performance bottlenecks in GPU training workloads.
 
-Common GPU training bottlenecks include:
+Common bottlenecks include:
 
 - GPU bottleneck
 - Data loading bottleneck
@@ -12,52 +12,54 @@ Common GPU training bottlenecks include:
 
 ---
 
-# 1 GPU Bottleneck
+## 1. GPU Bottleneck
 
 If GPU utilization is very high, the GPU is fully utilized.
 
 Check GPU utilization:
 
-nvidia-smi –query-gpu=utilization.gpu –format=csv
+```bash
+nvidia-smi --query-gpu=utilization.gpu --format=csv
+```
 
 Example:
 
+```text
 utilization.gpu [%]
 95 %
+```
 
-Meaning:
-
-GPU is fully utilized and doing heavy computation
+Meaning: GPU is fully utilized and doing heavy computation.
 
 No major bottleneck here.
 
 ---
 
-# 2 Data Loading Bottleneck
+## 2. Data Loading Bottleneck
 
 Symptoms:
 
 | Metric | Observation |
-|------|-------------|
-GPU Utilization | Low |
-CPU Utilization | High |
-Training Speed | Slow |
+| ------ | ----------- |
+| GPU Utilization | Low |
+| CPU Utilization | High |
+| Training Speed | Slow |
 
 Check GPU:
 
-nvidia-smi –query-gpu=utilization.gpu,utilization.memory –format=csv
+```bash
+nvidia-smi --query-gpu=utilization.gpu,utilization.memory --format=csv
+```
 
 Check CPU:
 
+```bash
 top -o %CPU
-
-or
-
+# or
 htop
+```
 
-Diagnosis:
-
-CPU cannot load data fast enough for the GPU
+Diagnosis: CPU cannot load data fast enough for the GPU.
 
 Solutions:
 
@@ -67,23 +69,23 @@ Solutions:
 
 ---
 
-# 3 Disk Bottleneck
+## 3. Disk Bottleneck
 
-Check disk performance.
+Check disk performance:
 
+```bash
 iostat -xz 1
+```
 
 Symptoms:
 
 | Metric | Observation |
-|------|-------------|
-Disk utilization | High |
-Training speed | Slow |
-GPU utilization | Low |
+| ------ | ----------- |
+| Disk utilization | High |
+| Training speed | Slow |
+| GPU utilization | Low |
 
-Diagnosis:
-
-Dataset loading from disk is too slow
+Diagnosis: dataset loading from disk is too slow.
 
 Solutions:
 
@@ -93,7 +95,7 @@ Solutions:
 
 ---
 
-# 4 Communication Bottleneck
+## 4. Communication Bottleneck
 
 Occurs in distributed training.
 
@@ -104,68 +106,78 @@ Symptoms:
 
 Check GPU topology:
 
+```bash
 nvidia-smi topo -m
+```
 
 Example:
 
+```text
 GPU0 GPU1
 PHB
+```
 
-PHB means GPUs communicate through PCIe.
+`PHB` means GPUs communicate through PCIe.
 
-Better option:
-
-NVLink
-
-which provides faster communication.
+Better option: `NVLink`, which provides faster communication.
 
 ---
 
-# 5 Memory Bottleneck
+## 5. Memory Bottleneck
 
 Symptoms:
 
+```text
 CUDA Out Of Memory
+```
 
 Check GPU memory usage:
 
-nvidia-smi –query-gpu=memory.used,memory.total –format=csv
+```bash
+nvidia-smi --query-gpu=memory.used,memory.total --format=csv
+```
 
 Example:
 
+```text
 15000 MiB / 16000 MiB
+```
 
 Solutions:
 
 - Reduce batch size
 - Use mixed precision training
-- Gradient checkpointing
+- Use gradient checkpointing
 
 ---
 
-# Throughput vs Latency
+## Throughput vs Latency
 
-Important performance metrics.
+Important performance metrics:
 
 | Metric | Meaning |
-|------|--------|
-Latency | Time required to complete one task |
-Throughput | Number of tasks completed per unit time |
+| ------ | ------- |
+| Latency | Time required to complete one task |
+| Throughput | Number of tasks completed per unit time |
 
 Example:
 
+```text
 Latency = 200 ms per request
 Throughput = 100 requests per second
+```
 
 ---
 
-# Amdahl's Law
+## Amdahl's Law
 
 Used to estimate scaling efficiency in distributed training.
 
 Formula:
 
+```text
 Speedup = 1 / (Serial Fraction + Parallel Fraction / N)
+```
 
 Where:
 
@@ -175,14 +187,11 @@ Where:
 
 Example:
 
+```text
 Serial Fraction = 0.2
 Parallel Fraction = 0.8
 GPUs = 4
-
 Speedup = 1 / (0.2 + 0.8 / 4)
+```
 
-Meaning:
-
-Training cannot scale infinitely due to serial parts of the workload
-
-
+Meaning: training cannot scale infinitely due to serial parts of the workload.

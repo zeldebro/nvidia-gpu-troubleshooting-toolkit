@@ -112,7 +112,7 @@ pip install -r requirements.txt
 
 ### PR Title Format
 
-```
+```text
 Add: new guide for H100 MIG troubleshooting
 Fix: incorrect nvidia-smi command in metrics guide
 Update: GPU Operator debug steps for v24.x
@@ -123,7 +123,7 @@ Script: automated NCCL debug log collector
 
 Use clear, descriptive commit messages:
 
-```
+```text
 Add distributed training debug guide with NCCL troubleshooting
 Fix nvidia-smi query syntax in GPU metrics guide
 Add GPU health check script with temperature warnings
@@ -136,7 +136,7 @@ Add GPU health check script with temperature warnings
 ### Markdown Guides
 
 - Use `#` headers for main sections
-- Use code blocks with language hints (```bash, ```yaml, ```python)
+- Use code blocks with language hints (for example: `bash`, `yaml`, `python`)
 - Include example output for every command
 - Add a brief explanation of what each command does
 - Use tables for comparing options/metrics
@@ -169,4 +169,3 @@ Add GPU health check script with temperature warnings
 ---
 
 Thank you for helping make GPU troubleshooting easier for everyone! 🚀
-

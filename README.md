@@ -26,9 +26,9 @@
 - [Repository Structure](#-repository-structure)
 - [Quick Start](#-quick-start)
 - [Troubleshooting Guides](#-troubleshooting-guides)
-- [Kubernetes GPU Guides](#-kubernetes-gpu-guides)
+- [Kubernetes GPU Guides](#kubernetes-gpu-guides)
 - [GPU Scaling Calculator](#-gpu-scaling-calculator)
-- [Automated Scripts](#-automated-scripts)
+- [Automated Scripts](#automated-scripts)
 - [GPU Monitoring Commands](#-gpu-monitoring-commands)
 - [Example Troubleshooting Scenarios](#-example-troubleshooting-scenarios)
 - [GPU Performance Metrics Reference](#-gpu-performance-metrics-reference)
@@ -54,7 +54,7 @@
 
 ## 📁 Repository Structure
 
-```
+```text
 nvidia-gpu-troubleshooting-toolkit/
 │
 ├── gpu-scaling-calculator/
@@ -135,7 +135,7 @@ chmod +x scripts/gpu-pod-debug.sh
 
 ---
 
-## ☸️ Kubernetes GPU Guides
+## Kubernetes GPU Guides
 
 | Guide | Description |
 |-------|-------------|
@@ -163,6 +163,7 @@ streamlit run gpu-scaling-calculator/gpu_scaling_calculator.py
 <summary>📸 Screenshot Preview</summary>
 
 The calculator provides a split-screen layout:
+
 - **Left**: Formula cards with explanations and examples
 - **Right**: Interactive input parameters with real-time results
 
@@ -170,7 +171,7 @@ The calculator provides a split-screen layout:
 
 ---
 
-## 🛠️ Automated Scripts
+## Automated Scripts
 
 ### GPU Health Check (`scripts/gpu-health-check.sh`)
 
@@ -181,6 +182,7 @@ One-command GPU health assessment:
 ```
 
 **What it checks:**
+
 - ✅ nvidia-smi availability
 - ✅ GPU driver version
 - ✅ CUDA version
@@ -198,6 +200,7 @@ One-command GPU health assessment:
 ```
 
 **What it checks:**
+
 - ✅ GPU Operator namespace and pods
 - ✅ Node GPU allocatable resources
 - ✅ Pending GPU pods
@@ -231,12 +234,14 @@ One-command GPU health assessment:
 <summary><strong>Scenario 1: Training job is slow — Low GPU utilization</strong></summary>
 
 **Symptoms:**
+
 - GPU utilization: 20%
 - CPU utilization: 90%
 
 **Diagnosis:** Data loading bottleneck — GPU is idle waiting for CPU/disk.
 
 **Solution:**
+
 1. Increase dataloader workers (`num_workers=8`)
 2. Use NVMe storage for datasets
 3. Optimize data preprocessing pipeline
@@ -248,12 +253,14 @@ One-command GPU health assessment:
 <summary><strong>Scenario 2: CUDA Out of Memory</strong></summary>
 
 **Symptoms:**
+
 - `RuntimeError: CUDA out of memory`
 - Training crashes immediately
 
 **Diagnosis:** Model or batch size exceeds GPU VRAM.
 
 **Solution:**
+
 1. Reduce batch size
 2. Enable mixed precision training (`torch.cuda.amp`)
 3. Use gradient checkpointing
@@ -265,12 +272,14 @@ One-command GPU health assessment:
 <summary><strong>Scenario 3: GPU pods stuck in Pending</strong></summary>
 
 **Symptoms:**
+
 - Pod status: `Pending`
 - Event: `Insufficient nvidia.com/gpu`
 
 **Diagnosis:** No available GPU resources in cluster.
 
 **Solution:**
+
 1. Check node GPU capacity: `kubectl describe node`
 2. Verify GPU Operator is running: `kubectl get pods -n gpu-operator`
 3. Check if other pods are consuming GPUs
@@ -282,12 +291,14 @@ One-command GPU health assessment:
 <summary><strong>Scenario 4: Multi-GPU training not scaling</strong></summary>
 
 **Symptoms:**
+
 - 4 GPUs but only 1.5x speedup
 - High serial fraction
 
 **Diagnosis:** Communication overhead or serial bottleneck.
 
 **Solution:**
+
 1. Check GPU topology: `nvidia-smi topo -m`
 2. Prefer NVLink over PCIe
 3. Increase batch size per GPU
@@ -375,4 +386,3 @@ This project is licensed under the [Apache License 2.0](LICENSE).
   <br/>
   <sub>If this toolkit helped you, give it a ⭐ — it helps others find it too!</sub>
 </p>
-
